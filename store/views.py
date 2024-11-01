@@ -14,9 +14,15 @@ from store.serializer import ProductSerializer, CollectionSerializer
 
 @api_view()
 def product_list(request):
-    products = Product.objects.all()
-    serializer = ProductSerializer(products, many=True)
-    return Response(serializer.data, status=status.HTTP_200_OK)
+    if request.method == 'GET':
+        products = Product.objects.all()
+        serializer = ProductSerializer(products, many=True , context={"request": request})
+        return Response(serializer.data, status=status.HTTP_200_OK)
+    elif request.method == 'POST':
+        serializer = ProductSerializer(data=request.data)
+        serializer.isvalid(request_exception = True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
 
 
 @api_view()
