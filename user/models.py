@@ -9,7 +9,6 @@ class Customer(AbstractUser):
         ('S', 'Silver'),
         ('G', 'Gold')
     ]
-    email =  models.EmailField(unique=True)
+    email = models.EmailField(unique=True)
     membership = models.CharField(max_length=1,
                                   choices=MEMBERSHIP_CHOICES, default='B')
-

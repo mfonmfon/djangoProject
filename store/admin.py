@@ -1,27 +1,24 @@
-from itertools import product
-
+# from itertools import product
 from django.contrib import admin
 from django.contrib.admin import ModelAdmin
-from django.http import request
-
-from store.models import Collection
-from store.models import Product, Collection
+from .models import Collection
+from .models import Product
 
 
 # Register your models here.
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ["title", "price", "description", "inventory_status", "collection"]
+    list_display = ["title", "price", "description", "inventory_status", "collections"]
     list_per_page = 10
-    list_editable = [ "price", "description"]
-    search_fields = ["title", "description"]
+    list_editable = ["price", "description"]
+    search_fields = ["title"]
 
-@admin.register(inventory ="inventory")
-def inventory_status(self, product: Product):
-    if product.inventory > 20:
-        return "in stock"
-    return "available"
+    @admin.display(ordering='-inventory')
+    def inventory_status(self, product: Product):
+        if product.inventory > 20:
+            return "LOW"
+        return "HIGH"
 
 @admin.register(Collection)
 class CollectionAdmin(ModelAdmin):
@@ -29,8 +26,8 @@ class CollectionAdmin(ModelAdmin):
     list_per_page = 10
     search_fields = ["title"]
 
-def product_count(self, collection: Collection):
-    return collection.product_set.count()
+    def product_count(self, collection: Collection):
+        return collection.product_set.count()
 
 
 

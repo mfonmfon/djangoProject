@@ -17,8 +17,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+admin.site.site_header = "ShopHere Administration"
+admin.site.site_title = "ShopHere Admin"
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # path("shophere_django/", include("shophere_django.urls")),
-    path("store/", include(" store.urls")),
+    # path("shophere_django/", include("ShopHere.ShopHere.urls")),
+    path("store/", include("store.url")),
 ]

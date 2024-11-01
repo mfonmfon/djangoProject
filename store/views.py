@@ -1,11 +1,10 @@
-from django.shortcuts import render
-from django.http import HttpResponse
+from django.shortcuts import render, get_object_or_404
+# from django.http import HttpResponse
 from rest_framework import status
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
-
-from store.models import Product
-from store.serializer import ProductSerializer
+from store.models import Product, Collection
+from store.serializer import ProductSerializer, CollectionSerializer
 
 
 # Create your views here.
@@ -19,8 +18,15 @@ def product_list(request):
     serializer = ProductSerializer(products, many=True)
     return Response(serializer.data, status=status.HTTP_200_OK)
 
+
 @api_view()
 def product_detail(request, pk):
-    product = Product.objects.get(pk=pk)
+    product = get_object_or_404(Product, pk=pk)
     serializer = ProductSerializer(product)
+    return Response(serializer.data, status=status.HTTP_200_OK)
+
+@api_view()
+def collection_display(request):
+    collection = Collection.objects.all()
+    serializer = CollectionSerializer(collection)
     return Response(serializer.data, status=status.HTTP_200_OK)
